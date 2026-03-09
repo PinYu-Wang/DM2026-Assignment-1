@@ -2,7 +2,7 @@ import numpy as np
 from model.utils import onehot_array
 from sklearn.metrics import (
     accuracy_score, precision_score, recall_score, f1_score,
-    roc_auc_score, roc_curve, confusion_matrix
+    roc_auc_score, confusion_matrix
 )
 import matplotlib.pyplot as plt
 
@@ -20,17 +20,15 @@ def accuracy(y,y_pred):
 
 
 
-def evaluate_binary_classifier(y_true, y_pred, y_proba, title='Model Evaluation'):
+def evaluate_binary_classifier(y_true, y_pred, title='Model Evaluation'):
     y_true = np.asarray(y_true).ravel().astype(int)
     y_pred = np.asarray(y_pred).ravel().astype(int)
-    y_proba = np.asarray(y_proba).ravel()
 
     metrics = {
-        'Accuracy': accuracy_score(y_true, y_pred),
-        'Precision': precision_score(y_true, y_pred, zero_division=0),
-        'Recall': recall_score(y_true, y_pred, zero_division=0),
-        'F1-score': f1_score(y_true, y_pred, zero_division=0),
-        'AUC-ROC': roc_auc_score(y_true, y_proba),
+        'Accuracy': 'TODO: use sklearn.metrics to compute accuracy',
+        'Precision': 'TODO: use sklearn.metrics to compute Precision',
+        'Recall': 'TODO: use sklearn.metrics to compute Recall',
+        'F1-score': 'TODO: use sklearn.metrics to compute F1-score'
     }
 
     print(title)
@@ -38,27 +36,19 @@ def evaluate_binary_classifier(y_true, y_pred, y_proba, title='Model Evaluation'
         print(f'{name:>10}: {value:.4f}')
 
     cm = confusion_matrix(y_true, y_pred, labels=[0, 1])
-    fpr, tpr, _ = roc_curve(y_true, y_proba)
 
-    fig, axes = plt.subplots(1, 2, figsize=(16, 4.2))
+    fig, ax = plt.subplots(figsize=(8, 4.2))
 
-    im = axes[0].imshow(cm, cmap='Blues')
-    axes[0].set_title('Confusion Matrix')
-    axes[0].set_xlabel('Predicted label')
-    axes[0].set_ylabel('True label')
-    axes[0].set_xticks([0, 1])
-    axes[0].set_yticks([0, 1])
+    im = ax.imshow(cm, cmap='Blues')
+    ax.set_title('Confusion Matrix')
+    ax.set_xlabel('Predicted label')
+    ax.set_ylabel('True label')
+    ax.set_xticks([0, 1])
+    ax.set_yticks([0, 1])
     for i in range(2):
         for j in range(2):
-            axes[0].text(j, i, str(cm[i, j]), ha='center', va='center', color='black')
-    fig.colorbar(im, ax=axes[0], fraction=0.046, pad=0.04)
-
-    axes[1].plot(fpr, tpr, label=f"AUC={metrics['AUC-ROC']:.3f}")
-    axes[1].plot([0, 1], [0, 1], 'k--', alpha=0.7)
-    axes[1].set_title('ROC Curve')
-    axes[1].set_xlabel('False Positive Rate')
-    axes[1].set_ylabel('True Positive Rate')
-    axes[1].legend(loc='lower right')
+            ax.text(j, i, str(cm[i, j]), ha='center', va='center', color='black')
+    fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
 
     plt.tight_layout()
     plt.show()
