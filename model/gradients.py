@@ -12,3 +12,11 @@ def logloss_sigmoid_grad(y,y_pred):
 	Derivative of sigmoid + log loss combination is equivalent to derivative of MSE 
 	'''
 	return MSE_grad(y,y_pred)/2
+
+import numpy as np
+
+def MAE_grad(y, y_pred):
+    '''
+    Gradient of MAE loss for linear regression
+    '''
+    return np.sign(y_pred - y) / len(y)
